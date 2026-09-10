@@ -5,7 +5,7 @@ import streamlit as st
 import pandas as pd
 
 st.set_page_config(
-    page_title="Scholarship Matching & Discovery Portal",
+    page_title="The Scholarship Radar",
     page_icon="🎓",
     layout="wide"
 )
@@ -14,8 +14,8 @@ st.set_page_config(
 TRANSLATIONS = {
     "English": {
         "yt_lang_suffix": "in english step by step",
-        "title": "🎓 Scholarship Matching & Discovery Portal",
-        "caption": "A centralized gateway to discover matching scholarships, verify eligibility, and organize required paperwork.",
+        "title": "The Scholarship Radar",
+        "caption": "Scan, Match, and Apply Faster, Your Gateway to Verified Scholarships.",
         "lang_select": "🌐 Select Language / भाषा चुनें",
         "profile_header": "Student Profile",
         "course_label": "Course of Study",
@@ -222,68 +222,88 @@ LOCAL_IMAGE_PATH = "background.jpg"
 FALLBACK_DIRECT_URL = "https://cdn.pixabay.com/photo/2016/06/01/06/26/open-book-1428428_1280.jpg"
 bg_source = get_base64_image(LOCAL_IMAGE_PATH) if os.path.exists(LOCAL_IMAGE_PATH) else FALLBACK_DIRECT_URL
 
+dark_mode = st.sidebar.toggle("🌙 Dark mode", value=False)
+theme = {
+    "overlay_top": "rgba(10, 15, 26, 0.56)" if dark_mode else "rgba(255, 255, 255, 0.46)",
+    "overlay_bottom": "rgba(15, 23, 42, 0.68)" if dark_mode else "rgba(248, 250, 252, 0.62)",
+    "app_text": "#e5e7eb" if dark_mode else "#1e293b",
+    "sidebar_background": "rgba(9, 14, 25, 0.42)" if dark_mode else "rgba(255, 255, 255, 0.42)",
+    "sidebar_border": "rgba(71, 85, 105, 0.55)" if dark_mode else "rgba(148, 163, 184, 0.55)",
+    "card_background": "rgba(17, 24, 39, 0.92)" if dark_mode else "rgba(255, 255, 255, 0.86)",
+    "shadow": "rgba(0, 0, 0, 0.25)" if dark_mode else "rgba(15, 23, 42, 0.12)",
+    "hover_shadow": "rgba(0, 0, 0, 0.4)" if dark_mode else "rgba(15, 23, 42, 0.2)",
+    "heading": "#f8fafc" if dark_mode else "#0f172a",
+    "muted_text": "#cbd5e1" if dark_mode else "#334155",
+    "input_background": "#111827" if dark_mode else "#ffffff",
+    "input_text": "#f8fafc" if dark_mode else "#0f172a",
+    "input_border": "#475569" if dark_mode else "#cbd5e1",
+    "tab_text": "#94a3b8" if dark_mode else "#475569",
+    "active_tab": "#fbbf24" if dark_mode else "#b45309",
+    "table_border": "#334155" if dark_mode else "#cbd5e1",
+}
+
 st.markdown(
     f"""
     <style>
     .stApp {{
         background: linear-gradient(
-            rgba(10, 15, 26, 0.56), 
-            rgba(15, 23, 42, 0.68)
+            {theme["overlay_top"]}, 
+            {theme["overlay_bottom"]}
         ),
         url('{bg_source}');
         background-size: cover;
         background-position: center center;
         background-repeat: no-repeat;
         background-attachment: fixed;
-        color: #e5e7eb;
+        color: {theme["app_text"]};
     }}
     [data-testid="stSidebar"] {{
-        background: rgba(9, 14, 25, 0.42) !important;
+        background: {theme["sidebar_background"]} !important;
         backdrop-filter: blur(12px);
-        border-right: 1px solid rgba(71, 85, 105, 0.55);
+        border-right: 1px solid {theme["sidebar_border"]};
     }}
     [data-testid="stVerticalBlockBorderWrapper"] {{
-        background: rgba(17, 24, 39, 0.92) !important;
+        background: {theme["card_background"]} !important;
         backdrop-filter: blur(10px);
         border: 1px solid rgba(251, 191, 36, 0.48) !important;
         border-radius: 14px;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(251, 191, 36, 0.12);
+        box-shadow: 0 4px 16px {theme["shadow"]}, inset 0 1px 0 rgba(251, 191, 36, 0.12);
         padding: 12px 16px;
         transition: transform 0.15s ease, box-shadow 0.15s ease;
     }}
     [data-testid="stVerticalBlockBorderWrapper"]:hover {{
         transform: translateY(-2px);
-        box-shadow: 0 8px 22px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(251, 191, 36, 0.2);
+        box-shadow: 0 8px 22px {theme["hover_shadow"]}, inset 0 1px 0 rgba(251, 191, 36, 0.2);
     }}
     h1, h2, h3 {{
-        color: #f8fafc;
+        color: {theme["heading"]};
         font-weight: 700;
     }}
     p, label, [data-testid="stCaptionContainer"] {{
-        color: #cbd5e1;
+        color: {theme["muted_text"]};
     }}
     [data-baseweb="select"] > div,
     [data-baseweb="input"] > div,
     [data-testid="stNumberInput"] input,
     [data-testid="stTextInput"] input {{
-        background: #111827 !important;
-        color: #f8fafc !important;
-        border-color: #475569 !important;
+        background: {theme["input_background"]} !important;
+        color: {theme["input_text"]} !important;
+        border-color: {theme["input_border"]} !important;
     }}
     [data-baseweb="popover"] > div,
     [role="listbox"] {{
-        background: #1e293b !important;
-        color: #f8fafc !important;
+        background: {theme["input_background"]} !important;
+        color: {theme["input_text"]} !important;
     }}
     [data-testid="stTabs"] button {{
-        color: #94a3b8;
+        color: {theme["tab_text"]};
     }}
     [data-testid="stTabs"] button[aria-selected="true"] {{
-        color: #fbbf24;
+        color: {theme["active_tab"]};
         border-bottom-color: #fbbf24;
     }}
     [data-testid="stDataFrame"] {{
-        border: 1px solid #334155;
+        border: 1px solid {theme["table_border"]};
         border-radius: 10px;
         overflow: hidden;
     }}
